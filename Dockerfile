@@ -34,10 +34,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         gnupg2 \
         locales \
-    && locale-gen \
     && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && echo "zh_CN.UTF-8 UTF-8" > /etc/locale.gen \
+    && sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
+    && locale-gen \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get -y --no-install-recommends install \
         unixodbc-dev \
