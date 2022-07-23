@@ -3,8 +3,9 @@ MAINTAINER LGH <lghbeta@gmail.com>
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
 ENV ORACLE_HOME=/usr/lib/instantclient_12_2
+ENV TNS_ADMIN=$ORACLE_HOME/network/admin
 
-# Install mysql postgresql oracle sqlserver extensions
+# Install extensions: mysql/postgresql/oracle/sqlserver
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libpq-dev \
