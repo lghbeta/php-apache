@@ -19,11 +19,11 @@ RUN apt-get update \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
     && rm -f instantclient.tar.gz \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
-    && ln -s /usr/local/lib/php/ /php \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get -y --no-install-recommends install unixodbc-dev msodbcsql17 \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -s /usr/local/lib/php/ /php \
     && docker-php-ext-install pdo mysqli pdo_mysql pgsql pdo_pgsql \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install oci8 \
