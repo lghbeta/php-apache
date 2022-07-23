@@ -22,14 +22,14 @@ RUN apt-get update \
     && ln -s /usr/local/lib/php/ /php \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get -y --no-install-recommends install unixodbc-dev msodbcsql17 \
+    && rm -f /etc/apt/sources.list.d/mssql-release.list \
+    && rm -rf /var/lib/apt/lists/*
     && docker-php-ext-install pdo mysqli pdo_mysql pgsql pdo_pgsql \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install oci8 \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install pdo_oci \
     && pecl install sqlsrv pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
-    && rm -f /etc/apt/sources.list.d/mssql-release.list \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 COPY index.php /var/www/html/
