@@ -10,8 +10,7 @@ RUN ln -s /usr/local/lib/php/ /php \
 
 # PostgreSQL Prerequisites
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libpq-dev \
+    && apt-get install -y --no-install-recommends libpq-dev \
     && docker-php-ext-install pgsql pdo_pgsql
 
 # Oracle Prerequisites
