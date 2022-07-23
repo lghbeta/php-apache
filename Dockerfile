@@ -25,6 +25,9 @@ RUN apt-get update \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/* \
     && ln -s /usr/local/lib/php/ /php \
+    && curl -sS https://getcomposer.org/installer | php \
+    && chmod +x composer.phar \
+    && mv composer.phar /usr/local/bin/composer \
     && docker-php-ext-install pdo mysqli pdo_mysql pgsql pdo_pgsql \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install oci8 \
