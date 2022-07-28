@@ -12,11 +12,11 @@ RUN ln -s /usr/local/lib/php/ /php \
     && mv composer.phar /usr/local/bin/composer \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \ # for gd
-        bzip2 libbz2-dev \                                    # for bz2
-        zlib1g-dev libzip-dev \                               # for zip
-        libpq-dev \                                           # for pgsql
-        libaio1 \                                             # for oci
+        libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
+        bzip2 libbz2-dev \
+        zlib1g-dev libzip-dev \
+        libpq-dev \
+        libaio1 \
         gnupg2 \
         locales \
     && docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
