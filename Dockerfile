@@ -15,12 +15,14 @@ RUN ln -s /usr/local/lib/php/ /php \
         libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
         bzip2 libbz2-dev \
         zlib1g-dev libzip-dev \
+        libicu-dev \
         libpq-dev \
         libaio1 \
         gnupg2 \
         locales \
+    && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
-    && docker-php-ext-install gd opcache bz2 zip gettext exif \
+    && docker-php-ext-install gd intl opcache bz2 zip gettext exif \
     && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
@@ -33,7 +35,7 @@ RUN ln -s /usr/local/lib/php/ /php \
     && ACCEPT_EULA=Y apt-get -y --no-install-recommends install unixodbc-dev msodbcsql17 \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install pdo mysqli pdo_mysql pgsql pdo_pgsql \
+    && docker-php-ext-install mysqli pdo_mysql pgsql pdo_pgsql \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install oci8 \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/lib/instantclient_12_2 \
