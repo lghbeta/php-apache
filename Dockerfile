@@ -5,8 +5,8 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
 ENV ORACLE_HOME=/usr/lib/instantclient_12_2
 ENV TNS_ADMIN=$ORACLE_HOME/network/admin
 
-# Install extensions: mysql/postgresql/oracle/sqlserver
-RUN && ln -s /usr/local/lib/php/ /php \
+# Install extensions: gd/opcache/bz2/zip/gettext/exif/mysql/postgresql/oracle/sqlserver
+RUN ln -s /usr/local/lib/php/ /php \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar \
     && mv composer.phar /usr/local/bin/composer \
