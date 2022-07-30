@@ -5,42 +5,57 @@ ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
 ENV ORACLE_HOME=/usr/lib/instantclient_12_2
 ENV TNS_ADMIN=$ORACLE_HOME/network/admin
 
-# Install extensions: gd/opcache/bz2/zip/gettext/exif/mysql/postgresql/oracle/sqlserver
+# install composer
 RUN ln -s /usr/local/lib/php/ /php \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar \
-    && mv composer.phar /usr/local/bin/composer \
+    && mv composer.phar /usr/local/bin/composer
+
+# persistent dependencies
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
+    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         bzip2 libbz2-dev \
+        libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
         zlib1g-dev libzip-dev \
         libicu-dev \
         libpq-dev \
         libaio1 \
         gnupg2 \
         locales \
-    && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
-    && docker-php-ext-install gd intl opcache bz2 zip gettext exif \
-    && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        msodbcsql17 \
+        unixodbc-dev \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
     && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/instantclient/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
-    && rm -f instantclient.tar.gz \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get -y --no-install-recommends install unixodbc-dev msodbcsql17 \
+    && rm -f instantclient.tar.gz \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install mysqli pdo_mysql pgsql pdo_pgsql \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+
+# install general extensions
+RUN docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
+    && docker-php-ext-install -j "$(nproc)" \
+        bcmath \
+        bz2 \
+        exif \
+        gettext \
+        gd \
+        intl \
+        opcache \
+        zip \
+# install database extensions
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
-    && docker-php-ext-install oci8 \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/lib/instantclient_12_2 \
-    && docker-php-ext-install pdo_oci \
+    && docker-php-ext-install -j "$(nproc)" \
+        oci8 \
+        pdo_oci \
     && pecl install sqlsrv pdo_sqlsrv \
     && docker-php-ext-enable sqlsrv pdo_sqlsrv
+    && chown -R www-data:www-data /var/www
 
 COPY index.php /var/www/html/
+VOLUME /var/www/html
