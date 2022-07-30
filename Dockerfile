@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 MAINTAINER LGH <lghbeta@gmail.com>
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
