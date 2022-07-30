@@ -23,6 +23,7 @@ RUN apt-get update \
         libaio1 \
         gnupg2 \
         locales \
+# sqlsrv dependencies
     && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
@@ -31,6 +32,7 @@ RUN apt-get update \
         unixodbc-dev \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
+# oci dependencies
     && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/instantclient/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
