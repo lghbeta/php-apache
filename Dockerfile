@@ -54,7 +54,7 @@ RUN docker-php-ext-configure gd --with-webp-dir=/usr/include/webp --with-jpeg-di
         oci8 \
         pdo_oci \
     && pecl install sqlsrv pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
     && chown -R www-data:www-data /var/www
 
 COPY index.php /var/www/html/
