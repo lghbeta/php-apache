@@ -12,10 +12,8 @@ RUN ln -s /usr/local/lib/php/ /php \
     && mv composer.phar /usr/local/bin/composer
 
 # persistent dependencies
-RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         bzip2 libbz2-dev \
         libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
         zlib1g-dev libzip-dev \
@@ -24,6 +22,10 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         libaio1 \
         gnupg2 \
         locales \
+    && RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
         msodbcsql17 \
         unixodbc-dev \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
