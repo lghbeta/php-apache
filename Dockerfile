@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:7.3-apache
 MAINTAINER LGH <lghbeta@gmail.com>
 
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
@@ -41,7 +41,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # install general extensions
-RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-webp-dir=/usr/include/webp --with-png-dir=/usr/include --with-freetype-dir=/usr/include/freetype2 \
     && docker-php-ext-install -j "$(nproc)" \
         bcmath \
         bz2 \
