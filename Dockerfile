@@ -15,7 +15,7 @@ RUN ln -s /usr/local/lib/php/ /php \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bzip2 libbz2-dev \
-        libwebp-dev libjpeg-dev libpng-dev libfreetype6-dev \
+        libjpeg-dev libwebp-dev libpng-dev libfreetype6-dev \
         zlib1g-dev libzip-dev \
         libicu-dev \
         libpq-dev \
@@ -39,7 +39,7 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
 # install general extensions
-RUN docker-php-ext-configure gd --with-jpeg=/usr/include --with-webp=/usr/include/webp --with-freetype=/usr/include/freetype2 \
+RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
     && docker-php-ext-install -j "$(nproc)" \
         bcmath \
         bz2 \
@@ -56,8 +56,7 @@ RUN docker-php-ext-configure gd --with-jpeg=/usr/include --with-webp=/usr/includ
         oci8 \
         pdo_oci \
     && pecl install sqlsrv pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
-    && chown -R www-data:www-data /var/www
+    && docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 COPY index.php /var/www/html/
 VOLUME /var/www/html
