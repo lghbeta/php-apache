@@ -7,6 +7,7 @@ ENV TNS_ADMIN=$ORACLE_HOME/network/admin
 
 # install composer
 RUN ln -s /usr/local/lib/php/ /php \
+    && ln -s /usr/local/etc/php/ /etc/php \
     && curl -sS https://getcomposer.org/installer | php \
     && chmod +x composer.phar \
     && mv composer.phar /usr/local/bin/composer
@@ -35,8 +36,7 @@ RUN apt-get update \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
     && rm -f instantclient.tar.gz \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
+    && rm -rf /var/lib/apt/lists/*
 
 # install general extensions
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
@@ -50,13 +50,20 @@ RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
         opcache \
         zip \
 # install database extensions
+    && docker-php-ext-install mysqli \
+        pdo_mysql \
+        pgsql \
+        pdo_pgsql \
     && docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/lib/instantclient_12_2 \
     && docker-php-ext-install -j "$(nproc)" \
         oci8 \
         pdo_oci \
-    && pecl install sqlsrv pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv
+    && pecl install sqlsrv \
+        pdo_sqlsrv \
+    && docker-php-ext-enable \
+        sqlsrv \
+        pdo_sqlsrv
 
 COPY index.php /var/www/html/
 VOLUME /var/www/html
