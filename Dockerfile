@@ -22,7 +22,7 @@ RUN apt-get update \
         libaio1 \
         gnupg2 \
         locales \
-    && RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
