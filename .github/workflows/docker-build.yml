@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '7.3-apache'
+      - '7.4-apache'
 
 jobs:
   push_to_registry:
