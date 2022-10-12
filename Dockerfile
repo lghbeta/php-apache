@@ -37,7 +37,7 @@ RUN apt-get update \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
 # wkhtmltox dependencies
-    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb
+    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
 # cleanup
     && rm -f instantclient.tar.gz wkhtmltox.deb \
