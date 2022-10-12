@@ -33,9 +33,13 @@ RUN apt-get update \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
 # oci dependencies
-    && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/instantclient/instantclient_12_2.tar.gz \
+    && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
+# cn fonts
+    && curl -o cnfonts.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/cnfonts.tar.gz \
+    && tar -zxvf cnfonts.tar.gz -C /usr/share/fonts/truetype/ \
+    && fc-cache -fv \
 # wkhtmltox dependencies
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
