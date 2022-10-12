@@ -16,6 +16,7 @@ RUN ln -s /usr/local/lib/php/ /php \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bzip2 libbz2-dev \
+        fontconfig \
         libjpeg-dev libwebp-dev libpng-dev libfreetype6-dev \
         zlib1g-dev libzip-dev \
         libicu-dev \
@@ -38,7 +39,6 @@ RUN apt-get update \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
 # cn fonts
     && curl -o cnfonts.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/cnfonts.tar.gz \
-    && mkdir -p /usr/share/fonts/truetype/ \
     && tar -zxvf cnfonts.tar.gz -C /usr/share/fonts/truetype/ \
     && fc-cache -fv \
 # wkhtmltox dependencies
