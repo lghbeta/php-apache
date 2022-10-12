@@ -36,7 +36,11 @@ RUN apt-get update \
     && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/instantclient/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
-    && rm -f instantclient.tar.gz \
+# wkhtmltox dependencies
+    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
+    && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
+# cleanup
+    && rm -f instantclient.tar.gz wkhtmltox.deb \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/*
 
