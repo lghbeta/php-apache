@@ -38,13 +38,14 @@ RUN apt-get update \
     && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
 # cn fonts
     && curl -o cnfonts.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/cnfonts.tar.gz \
+    && mkdir -p /usr/share/fonts/truetype/
     && tar -zxvf cnfonts.tar.gz -C /usr/share/fonts/truetype/ \
     && fc-cache -fv \
 # wkhtmltox dependencies
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
 # cleanup
-    && rm -f instantclient.tar.gz wkhtmltox.deb \
+    && rm -f instantclient.tar.gz cnfonts.tar.gz wkhtmltox.deb \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/*
 
