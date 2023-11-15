@@ -72,8 +72,8 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-webp-dir=/us
     && docker-php-ext-install -j "$(nproc)" \
         oci8 \
         pdo_oci \
-    && pecl install sqlsrv \
-        pdo_sqlsrv \
+    && pecl install sqlsrv-5.10.1 \
+        pdo_sqlsrv-5.10.1 \
     && docker-php-ext-enable \
         sqlsrv \
         pdo_sqlsrv
