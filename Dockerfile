@@ -35,6 +35,8 @@ RUN apt-get update \
         unixodbc-dev \
     && sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
+# set ssl seclevel=1
+    && sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf \
 # oci dependencies
     && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \

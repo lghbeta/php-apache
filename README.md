@@ -8,6 +8,8 @@ This image contains Debian's Apache httpd in conjunction with PHP (as `mod_php`)
 - wkhtmltox
 - php extensions (sqlsrv, oci8, pgsql, mysqli...)
 
+> `CipherString = DEFAULT@SECLEVEL=1` has been set in `/etc/ssl/openssl.cnf`, for compatible with MSSQL 2014 and lower versions
+
 ## Copy default configuration files from container
 
 ```shell
