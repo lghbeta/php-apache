@@ -4,6 +4,7 @@ MAINTAINER LGH <lghbeta@gmail.com>
 ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2
 ENV ORACLE_HOME=/usr/lib/instantclient_12_2
 ENV TNS_ADMIN=$ORACLE_HOME/network/admin
+ENV PATH=$LD_LIBRARY_PATH:$PATH
 
 # install composer
 RUN ln -s /usr/local/lib/php/ /php \
@@ -26,7 +27,7 @@ RUN apt-get update \
         locales \
         inetutils-ping \
         net-tools \
-# sqlsrv dependencies
+# sqlsrv
     && curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
@@ -37,19 +38,24 @@ RUN apt-get update \
     && locale-gen \
 # set ssl seclevel=1
     && sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf \
-# oci dependencies
+# oci8
     && curl -o instantclient.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/instantclient_12_2.tar.gz \
     && tar -zxvf instantclient.tar.gz -C /usr/lib/ \
-    && ln -sf /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/instantclient_12_2/libclntsh.so \
+    && cd /usr/lib/instantclient_12_2 \
+    && ln -sf libclntsh.so.12.1 libclntsh.so \
+    && ln -sf libclntshcore.so.12.1 libclntshcore.so \
+    && ln -sf libocci.so.12.1 libocci.so \
+    && cd - \
 # cn fonts
     && curl -o extrafonts.tar.gz -sSL https://github.com/lghbeta/php-apache/releases/download/dependency/extrafonts.tar.gz \
     && tar -zxvf extrafonts.tar.gz -C /usr/share/fonts/truetype/ \
-    && fc-cache -fv \
-# wkhtmltox dependencies
+    && fc-cache -f \
+# wkhtmltox
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bullseye_amd64.deb \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
 # cleanup
     && rm -f instantclient.tar.gz extrafonts.tar.gz wkhtmltox.deb \
+    && apt-get clean \
     && rm -f /etc/apt/sources.list.d/mssql-release.list \
     && rm -rf /var/lib/apt/lists/*
 

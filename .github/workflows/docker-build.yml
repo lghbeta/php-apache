@@ -1,10 +1,10 @@
 name: Build docker image
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - '7.3-apache'
-      - '7.4-apache'
+      - '*-apache'
 
 jobs:
   push_to_registry:
